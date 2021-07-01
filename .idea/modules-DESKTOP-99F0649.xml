@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BLEscanner.iml" filepath="$PROJECT_DIR$/.idea/modules/BLEscanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BLEscanner.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BLEscanner.app.iml" />
+    </modules>
+  </component>
+</project>
