@@ -139,7 +139,7 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
             {
                 viewHolder.deviceName.setText( R.string.unknown_device );
             }
-            viewHolder.deviceAddress.setText( String.format("ID=%04x", device.getDeviceId()) );
+            viewHolder.deviceAddress.setText( String.format("ID:%04x  RSSI:%d", device.getDeviceId(), device.getRssi()) );
 
             return convertView;
         }
@@ -175,7 +175,8 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
                     //info.scanRecord = result.getScanRecord();
                     int deviceId = result.getScanRecord().getManufacturerSpecificData().keyAt(0);
                     byte[] record = result.getScanRecord().getManufacturerSpecificData().valueAt(0);
-                    DeviceInfo info = new DeviceInfo(address,deviceId,record);
+                    int rssi = result.getRssi();
+                    DeviceInfo info = new DeviceInfo(address,deviceId,record, rssi);
 
                     String name = sharedPreferences.getString(info.getAddress(), "");
                     info.setName(name);
@@ -439,20 +440,36 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
                 Map<String,?> map = (Map<String,?>)sharedPreferences.getAll();
                 if( map == null ) break;
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                for ( Map.Entry<String,?> entry : map.entrySet() )
-                {
-                    editor.remove(entry.getKey());
-                }
-                editor.commit();
+                new AlertDialog.Builder(DeviceListActivity.this)
+                        .setTitle("表示削除")
+                        .setMessage("全ての表示名を削除します")
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                for( int pos=0; pos < mDeviceListAdapter.mDeviceList.size(); pos++ )
-                {
-                    DeviceInfo info = mDeviceListAdapter.mDeviceList.get(pos);
-                    info.setName("");
-                    mDeviceListAdapter.mDeviceList.set(pos,info);
-                }
-                mDeviceListAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                for ( Map.Entry<String,?> entry : map.entrySet() )
+                                {
+                                    editor.remove(entry.getKey());
+                                }
+                                editor.commit();
+
+                                for( int pos=0; pos < mDeviceListAdapter.mDeviceList.size(); pos++ )
+                                {
+                                    DeviceInfo info = mDeviceListAdapter.mDeviceList.get(pos);
+                                    info.setName("");
+                                    mDeviceListAdapter.mDeviceList.set(pos,info);
+                                }
+                                mDeviceListAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .show();
+
                 break;
         }
         return true;

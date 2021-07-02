@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity
                     double battery = record[5];
                     long record6 = record[6]; record6 &= 0xff;
                     battery += (double)(record6/16*10 + record6%16)/100;
-                    strAddress = String.format("BATT : %1.2fV ", battery);
+                    strAddress = String.format("BATT : %1.2fV  RSSI : %d", battery, device.getRssi());
 
                     // 温度
                     int pol = record[2];
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
             viewHolder.deviceName.setText( strRecord );
-            viewHolder.deviceAddress.setText( strAddress.concat(String.format("  (%s)",device.getAddress())) );
+            viewHolder.deviceAddress.setText( strAddress );
 
             return convertView;
         }
@@ -213,7 +213,8 @@ public class MainActivity extends AppCompatActivity
                     //info.scanRecord = result.getScanRecord();
                     int deviceId = result.getScanRecord().getManufacturerSpecificData().keyAt(0);
                     byte[] record = result.getScanRecord().getManufacturerSpecificData().valueAt(0);
-                    DeviceInfo info = new DeviceInfo(address, deviceId, record);
+                    int rssi = result.getRssi();
+                    DeviceInfo info = new DeviceInfo(address, deviceId, record, rssi);
 
                     if (deviceNameMap == null)
                     {
@@ -229,7 +230,7 @@ public class MainActivity extends AppCompatActivity
                             info.setName(name);
                             mDeviceListAdapter.addDevice(info);
 
-                            // デバイス名から該当のアドレスを削除。デバイス名が全てなくなったらスキャン終了
+                            // デバイス名のリストから該当のアドレスを削除。デバイス名が全てなくなったらスキャン終了
                             deviceNameMap.remove(info.getAddress());
                             if (deviceNameMap.size() == 0)
                             {
@@ -420,7 +421,7 @@ public class MainActivity extends AppCompatActivity
             // 名前設定されたデバイスがない場合はアラート表示
             new AlertDialog.Builder(this)
                     .setTitle("Usage")
-                    .setMessage("デバイス名が登録されていません。設定画面にてデバイスのIPに名前を登録してください。")
+                    .setMessage("デバイスの表示名が登録されていません。設定画面にてデバイスのIPに名前を登録してください。")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
