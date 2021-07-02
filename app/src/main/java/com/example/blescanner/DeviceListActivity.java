@@ -51,7 +51,7 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
         // リストへの追加
         public void addDevice( DeviceInfo device )
         {
-/*            int idx = mDeviceList.indexOf(device);
+            int idx = mDeviceList.indexOf(device);
             if( idx == -1 )
             {    // 加えられていなければ加える
                 mDeviceList.add( device );
@@ -62,13 +62,6 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
                 mDeviceList.set(idx, device);
             }
             notifyDataSetChanged();    // ListViewの更新
-            return mDeviceList.size();
-*/
-            if( !mDeviceList.contains(device))
-            {
-                mDeviceList.add(device);
-                notifyDataSetChanged();
-            }
         }
 
         // リストのクリア

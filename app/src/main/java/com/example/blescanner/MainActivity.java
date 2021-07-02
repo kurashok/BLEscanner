@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
         // リストへの追加
         public void addDevice( DeviceInfo device )
         {
-/*            int idx = mDeviceList.indexOf(device);
+            int idx = mDeviceList.indexOf(device);
             if( idx == -1 )
             {    // 加えられていなければ加える
                 mDeviceList.add( device );
@@ -66,13 +66,14 @@ public class MainActivity extends AppCompatActivity
                 mDeviceList.set(idx, device);
             }
             notifyDataSetChanged();    // ListViewの更新
-            return mDeviceList.size();
-*/
+/*            return mDeviceList.size();
+
             if( !mDeviceList.contains(device))
             {
                 mDeviceList.add(device);
                 notifyDataSetChanged();
             }
+*/
         }
 
         // リストのクリア
